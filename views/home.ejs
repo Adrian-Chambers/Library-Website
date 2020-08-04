@@ -1,21 +1,7 @@
 <%- include("partials/header"); -%>
 <%- include("partials/navigation"); -%>
 
-<div class="jumbotron">
-<div class="pt-5 pb-5 ml-auto mr-auto w-75">
-    <h3 class="display-4 font-italic">Search for Books</h3>
-    <form action="/search" method="post">
-    <div class="input-group mb-3">
-        <input class="form-control" name="keyword" type="text"/>
-        <button class="btn btn-outline-secondary" name="submit" type="submit">Search</button>
-    </div>
-    </form>
-</div>
-</div>
-
-<div>
-    
-</div>
+<%- include("partials/search-books"); -%>
 
 <%- include("partials/footer"); -%>
 

@@ -1,10 +1,14 @@
 <%- include("partials/header"); -%>
 <%- include("partials/navigation"); -%>
 
-<h2><%=title%></h2>
-<p><%=message%></p>
-<form action="<%=link%>" method="get"> 
-    <button type="confirm">Back</button>
-</form>
 
+<h2 class="text-center display-4 p-5"><%=title%></h2>
+
+<div class="text-center ml-auto mr-auto w-75">
+    <h4><%=message%></h4>
+
+    <form action="<%=link%>" method="get"> 
+        <button class="btn btn-lg btn-dark m-5" type="confirm">Back</button>
+    </form>
+</div>
 <%- include("partials/footer"); -%>

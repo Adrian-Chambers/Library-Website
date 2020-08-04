@@ -1,39 +1,33 @@
 <%- include("partials/header") -%>
 <%- include("partials/navigation") -%>
 
-<div class="jumbotron">
-<div class="ml-auto mr-auto w-75">
-    <form action="/search" method="post">
-    <h3 class="display-4 font-italic">Search for Books</h3>
-    <div class="input-group mb-3">
-        <input class="form-control" name="keyword" value="<%=keyword%>" type="text" />
-        <button class="btn btn-outline-secondary" name="submit" type="submit">Search</button>
-    </div>
-    </form>
-</div>
-</div>
+<%- include("partials/search-books"); -%>
 
-<div class="ml-auto mr-auto w-75">
+<div class="bg-dark-brown p-5">
     <% if(results.length === 0) { %>
-        <div>
+        <div class="text-center bg-dark-brown p-5">
             <h3>No results found.</h3>
+            <h4>Please try again.</h4>
         </div>
     <% } else {%>
-    <div class="row bg-dark text-light">
-        <h3 class="table-item col-4">Title</h3>
-        <h3 class="table-item col-3">Author</h3>
-        <h3 class="table-item col-3">ISBN</h3>
-        <h3 class="table-item col-2">View</h3>
-    </div>
-    <% for(var i = 0; i < results.length; i++){ %>
-    <%  var book = results[i];    %>
-        <div class="row bg-light">
-            <h4 class="table-item col-4"><%=book.title%></h4>
-            <h4 class="table-item col-3"><%=book.author%></h4>
-            <h4 class="table-item col-3"><%=book.isbn%></h4>
-            <a class="table-item col-2" href="/book-info?bookId=<%=book._id%>">View</a>
+        <div class="mx-auto w-75">
+            <div class="row bg-light-brown">
+                <h3 class="table-item col-4">Title</h3>
+                <h3 class="table-item col-3">Author</h3>
+                <h3 class="table-item col-3">ISBN</h3>
+                <h3 class="table-item col-2"></h3>
+            </div>
+            <% for(var i = 0; i < results.length; i++){ %>
+            <%  var book = results[i];    %>
+                <div class="row bg-light text-dark">
+                    <h4 class="table-item col-4"><%=book.title%></h4>
+                    <h4 class="table-item col-3"><%=book.author%></h4>
+                    <h4 class="table-item col-3"><%=book.isbn%></h4>
+                    <a class="table-item col-2" href="/book-info?bookId=<%=book._id%>"><h4>View</h4></a>
+                </div> 
+            <% } %>
         </div>
-    <% }} %>
+    <% } %>
 </div>
 
 <%- include("partials/footer") -%>

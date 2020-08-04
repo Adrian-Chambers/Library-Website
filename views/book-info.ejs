@@ -1,25 +1,27 @@
 <%- include("partials/header"); -%>
 <%- include("partials/navigation"); -%>
 
-<h2 class="text-center display-4"><%=book.title%></h2>
+<div class="jumbotron jumbotron-book mb-0">
 
-<div class="text-center ml-auto mr-auto w-75">
+<h2 class="heading text-light text-center display-4 "><%=book.title%></h2>
+
+<div class="jumbotron-book-inner mx-auto w-50">
     <div class="row">
-        <h3 class="table-item mb-0 bg-dark text-light col-6">Author</h3>
-        <h4 class="table-item col-6"><%=book.author%></h4>
+        <h3 class="table-item mb-0 bg-dark-brown text-light col-4">Author</h3>
+        <h4 class="table-item mb-0 bg-light-brown col-8"><%=book.author%></h4>
     </div>
     <div class="row">
-        <h3 class="table-item mt-0 mb-0 bg-dark text-light col-6">ISBN</h3>
-        <h4 class="table-item col-6"><%=book.isbn%></h4>
+        <h3 class="table-item mt-0 mb-0 bg-dark-brown text-light col-4">ISBN</h3>
+        <h4 class="table-item mt-0 mb-0 bg-light-brown col-8"><%=book.isbn%></h4>
     </div>
     <div class="row">
-        <h3 class="table-item mt-0 bg-dark text-light col-6">Available?</h3>
-        <h4 class="table-item col-6"><%=book.availability.isReturned%></h4>
+        <h3 class="table-item mt-0 bg-dark-brown text-light col-4">Available?</h3>
+        <h4 class="table-item mt-0 bg-light-brown col-8"><%=book.availability.isReturned%></h4>
     </div><br />
-    <form action="/borrow?bookId=<%=book._id%>" method="post">
-        <button class="btn btn-lg btn-secondary" name="borrow" type="submit">Borrow Book</button>
+    <form class="text-center mt-5" action="/borrow?bookId=<%=book._id%>" method="post">
+        <button class="btn btn-lg btn-outline-light" name="borrow" type="submit">Borrow Book</button>
     </form>
 </div>
-
+</div>
 
 <%- include("partials/footer"); -%>

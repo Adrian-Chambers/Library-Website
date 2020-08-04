@@ -1,23 +1,22 @@
 <%- include("partials/header"); -%>
 <%- include("partials/navigation"); -%>
 
-<h2 class="text-center display-4">Transactions</h2>
+<h2 class="text-center display-4 p-5">Transactions</h2>
 
 <div class="ml-auto mr-auto w-75">
-    <div class="row bg-dark text-light">
-        <h3 class="table-item col-3">Title</h3>
-        <h3 class="table-item col-2">Author</h3>
-        <h3 class="table-item col-2">ISBN</h3>
-        <h3 class="table-item col-2">Borrowed</h3>
-        <h3 class="table-item col-2">Returned</h3>
-    </div>
-
-    <div>
+   <div>
         <% if(results.length === 0) { %>
             <div>
                 <p>No transactions found.</p>
             </div>
-        <% } %>
+        <% } else {%>
+            <div class="row bg-dark text-light">
+                <h3 class="table-item col-3">Title</h3>
+                <h3 class="table-item col-2">Author</h3>
+                <h3 class="table-item col-2">ISBN</h3>
+                <h3 class="table-item col-2">Borrowed</h3>
+                <h3 class="table-item col-2">Returned</h3>
+            </div>
         <% for(var i = 0; i < results.length; i++){ %>
         <%      var transaction = results[i];    %>
                 <div class="row bg-light">
@@ -33,7 +32,7 @@
                     <h4 class="table-item col-2"><%=transaction.dateReturned%></h4>
                 <% } %>
                 </div>
-        <% } %>
+        <% }} %>
     </div>
 
 </div>

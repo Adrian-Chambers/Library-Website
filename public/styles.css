@@ -1,6 +1,5 @@
-body{
-  background-image: -webkit-linear-gradient(65deg, #A683E3 50%, #E4E9FD 50%);
-  min-height: 1000px;
+html, body{
+  background-color: #4D4755;
 }
 
 input[type=text], input[type=password]{
@@ -8,14 +7,12 @@ input[type=text], input[type=password]{
   font-size: 21px;
 }
 
-/* Classes */
-.showError{
-  color: red;
-  visibility: hidden;
+nav a{
+  color: whitesmoke;
 }
 
-.hide{
-  visibility: hidden;
+nav a:hover{
+  color: #D6AC97;
 }
 
 /* containers */
@@ -28,7 +25,62 @@ input[type=text], input[type=password]{
   width: 50%;
 }
 
+.jumbotron-library{
+  background-image: url("/images/library1.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 600px;
+}
+
+.jumbotron-library-inner{
+  margin-top: 100px;
+  padding: 20px;
+}
+
+.jumbotron-book{
+  background-image: url("/images/library2.jpg");
+  color: black;
+  height: 800px;
+}
+
+.jumbotron-book-inner{
+  margin-top: 100px;
+  padding: 20px;
+}
+
 /* Table */
 .table-item{
   padding: 20px;
+}
+
+/* Colors */
+.bg-dark-brown{
+  background-color: #4D4755;
+  color: white;
+}
+
+.bg-light-brown{
+  background-color: #D6AC97;
+}
+
+.bg-blue{
+  background-color: #7B90B3;
+  color: white;
+}
+
+.bg-green{
+  background-color: #91B3BC;
+  color: black;
+}
+
+.color-blue{
+  color: #7B90B3;
+}
+
+.color-green{
+  color: #91B3BC;
+}
+
+.color-light-brown{
+  color: #D6AC97;
 }

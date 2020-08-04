@@ -7,8 +7,6 @@ const _ = require("lodash");
 const app = express();
 const mongoose = require("mongoose");
 const fs = require("fs");
-const { isBuffer } = require("lodash");
-const { queue } = require("async");
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
