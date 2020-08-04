@@ -18,34 +18,43 @@ nav a:hover{
 /* containers */
 .sign-in-container{
   background-color: white;
-  border-radius: 20px;
-  margin: auto;
-  margin-top: 120px;
   padding: 50px 0 50px 0;
   width: 50%;
 }
 
-.jumbotron-library{
+.jumbotron1{
   background-image: url("/images/library1.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   height: 600px;
 }
 
-.jumbotron-library-inner{
+.jumbotron1-inner{
   margin-top: 100px;
   padding: 20px;
 }
 
-.jumbotron-book{
+.jumbotron2{
   background-image: url("/images/library2.jpg");
   color: black;
-  height: 800px;
+  height: 850px;
 }
 
-.jumbotron-book-inner{
+.jumbotron2-inner{
   margin-top: 100px;
   padding: 20px;
+}
+
+.jumbotron-brown{
+  background-color: #D6AC97;
+}
+
+.dark-container{
+  background-color: #4D4755;
+  border-radius: 10px;
+  margin: auto;
+  padding: 10px 10px 50px 10px;
+  width: 50%
 }
 
 /* Table */
@@ -55,6 +64,11 @@ nav a:hover{
 
 /* Colors */
 .bg-dark-brown{
+  background-color: #4D4755;
+  color: white;
+}
+
+.btn-dark-brown{
   background-color: #4D4755;
   color: white;
 }

@@ -185,7 +185,7 @@ app.post("/borrow?:bookId", function(req, res){
             var transaction = new Transaction({
                 book: book,
                 user: currentUser,
-                dateBorrowed: new Date(),
+                dateBorrowed: Date.now(),
                 dateReturned: "Not Returned",
                 isReturned: false
             });
