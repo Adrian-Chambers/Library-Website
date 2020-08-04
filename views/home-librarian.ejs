@@ -1,0 +1,26 @@
+<%- include("partials/header"); -%>
+<%- include("partials/navigation"); -%>
+
+<h2 id="heading">Home</h2>
+
+<div>
+    <h3>Search for Books</h3>
+    <form action="/search" method="post">
+        <input name="keyword" type="text"/>
+        <button name="submit" type="submit">Search</button>
+        <div>
+            <input name="searchBy" value="title" type="radio" checked />
+            <label>Title</label>
+            <input name="searchBy" value="author" type="radio" />
+            <label>Author</label>
+            <input name="searchBy" value="isbn" type="radio" />
+            <label>ISBN</label>
+        </div>
+    </form>
+</div>
+
+<div>
+    
+</div>
+
+<%- include("partials/footer"); -%>

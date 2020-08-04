@@ -1,0 +1,18 @@
+<%- include("partials/header"); -%>
+<%- include("partials/navigation"); -%>
+
+<form action="/book-edit?bookId=<%=book._id%>" method="post">
+    <label>Title</label>
+    <input name="title" value="<%=book.title%>" type="text"/>
+    <label>Author</label>
+    <input name="author" value="<%=book.author%>" type="text"/>
+    <label>ISBN</label>
+    <input name="isbn" value="<%=book.isbn%>" type="text"/>
+    <button name="update" type="submit">Update</button>
+</form>
+<form action="/book-delete?bookId=<%=book._id%>" method="post">
+    <button name="delete" type="submit">Delete</button>
+</form>
+
+
+<%- include("partials/footer"); -%>

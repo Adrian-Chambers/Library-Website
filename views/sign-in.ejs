@@ -1,0 +1,26 @@
+<%- include("partials/header"); -%>
+
+<h2 class="text-center display-4">Sign In</h2>
+
+<form action="/sign-in" method="post">
+<div class="text-center ml-auto mr-auto w-75">
+    <div class="form-group text-left">
+        <label>Username</label>
+        <input class="form-control" name="username" placeholder="username" type="text"/>
+    </div>
+    <div class="form-group text-left">
+        <label>Password</label>
+        <input class="form-control" name="password" placeholder="password" type="text"/>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-md btn-secondary" name="button" type="submit">Confirm</button>
+    </div>
+    <div class="form-group">
+        <a href="register">Create an Account</a>
+    </div>
+</div>
+</form>
+
+
+<%- include("partials/footer"); -%>
+

@@ -1,0 +1,25 @@
+<%- include("partials/header"); -%>
+<%- include("partials/navigation"); -%>
+
+<h2 class="text-center display-4"><%=book.title%></h2>
+
+<div class="text-center ml-auto mr-auto w-75">
+    <div class="row">
+        <h3 class="table-item mb-0 bg-dark text-light col-6">Author</h3>
+        <h4 class="table-item col-6"><%=book.author%></h4>
+    </div>
+    <div class="row">
+        <h3 class="table-item mt-0 mb-0 bg-dark text-light col-6">ISBN</h3>
+        <h4 class="table-item col-6"><%=book.isbn%></h4>
+    </div>
+    <div class="row">
+        <h3 class="table-item mt-0 bg-dark text-light col-6">Available?</h3>
+        <h4 class="table-item col-6"><%=book.availability.isReturned%></h4>
+    </div><br />
+    <form action="/borrow?bookId=<%=book._id%>" method="post">
+        <button class="btn btn-lg btn-secondary" name="borrow" type="submit">Borrow Book</button>
+    </form>
+</div>
+
+
+<%- include("partials/footer"); -%>
