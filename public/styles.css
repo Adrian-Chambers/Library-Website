@@ -1,13 +1,11 @@
-html {
-    background-image: -webkit-linear-gradient(65deg, #A683E3 50%, #E4E9FD 50%);
-    min-height: 1000px;
-  }
-  
+body{
+  background-image: -webkit-linear-gradient(65deg, #A683E3 50%, #E4E9FD 50%);
+  min-height: 1000px;
+}
 
-footer {
-  color: white;
-  color: rgba(0, 0, 0, 0.5);
-  text-align: center;
+input[type=text], input[type=password]{
+  border-radius: 5px;
+  font-size: 21px;
 }
 
 /* Classes */
@@ -20,7 +18,17 @@ footer {
   visibility: hidden;
 }
 
+/* containers */
+.sign-in-container{
+  background-color: white;
+  border-radius: 20px;
+  margin: auto;
+  margin-top: 120px;
+  padding: 50px 0 50px 0;
+  width: 50%;
+}
+
 /* Table */
 .table-item{
-  padding: 40px 20px 40px 20px;
+  padding: 20px;
 }

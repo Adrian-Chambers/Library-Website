@@ -1,32 +1,38 @@
 <%- include("partials/header"); -%>
 
+<div class="sign-in-container">
+
 <h2 class="text-center display-4">Register</h2>
 
 <form action="/register" method="post">
 <div class="text-center ml-auto mr-auto w-75">
-    <div class="row form-group text-left">
+    <div class="pt-4 row form-group text-left">
         <div class="col-6">
-            <label>First Name</label>
+            <h5>First Name</h5>
             <input class="form-control" name="firstName" placeholder="first" type="text" />
         </div>
         <div class="col-6">
-            <label>Last Name</label>
+            <h5>Last Name</h5>
             <input class="form-control" name="lastName" placeholder="last" type="text" />
         </div>
     </div>
-    <div class="form-group text-left">
-        <label>Username</label>
+    <div class="pt-4 form-group text-left">
+        <h5>Username</h5>
         <input class="form-control" name="username" placeholder="username" type="text" />
     </div>
-    <div class="form-group text-left">
-        <label>Password</label>
-        <input class="form-control" name="password" placeholder="password" type="password" />
+    <div class="pt-4 form-group text-left">
+        <h5>Password</h5>
+        <input class="form-control" name="password" placeholder="password" type="text" />
+    </div>
+    <div class="pt-4 form-group">
+        <button class="btn btn-lg btn-secondary" type="submit">Submit</button>
     </div>
     <div class="form-group">
-        <button class="btn btn-md btn-secondary" type="submit">Submit</button>
+        <a href="sign-in">Already have an account? Sign in.</a>
     </div>
 </div>
 </form>
 
+</div>
 
 <%- include("partials/footer"); -%>

@@ -1,7 +1,7 @@
 <%- include("partials/header") -%>
 <%- include("partials/navigation") -%>
 
-<div class="jumbotron bg-light">
+<div class="jumbotron">
 <div class="ml-auto mr-auto w-75">
     <form action="/search" method="post">
     <h3 class="display-4 font-italic">Search for Books</h3>
@@ -14,19 +14,17 @@
 </div>
 
 <div class="ml-auto mr-auto w-75">
+    <% if(results.length === 0) { %>
+        <div>
+            <h3>No results found.</h3>
+        </div>
+    <% } else {%>
     <div class="row bg-dark text-light">
         <h3 class="table-item col-4">Title</h3>
         <h3 class="table-item col-3">Author</h3>
         <h3 class="table-item col-3">ISBN</h3>
         <h3 class="table-item col-2">View</h3>
     </div>
-
-
-    <% if(results.length === 0) { %>
-        <div>
-            <h3>No results found.</h3>
-        </div>
-    <% } %>
     <% for(var i = 0; i < results.length; i++){ %>
     <%  var book = results[i];    %>
         <div class="row bg-light">
@@ -35,7 +33,7 @@
             <h4 class="table-item col-3"><%=book.isbn%></h4>
             <a class="table-item col-2" href="/book-info?bookId=<%=book._id%>">View</a>
         </div>
-    <% } %>
+    <% }} %>
 </div>
 
 <%- include("partials/footer") -%>

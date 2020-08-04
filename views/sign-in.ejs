@@ -1,26 +1,29 @@
 <%- include("partials/header"); -%>
 
+<div class="sign-in-container">
+
 <h2 class="text-center display-4">Sign In</h2>
 
 <form action="/sign-in" method="post">
+
 <div class="text-center ml-auto mr-auto w-75">
-    <div class="form-group text-left">
-        <label>Username</label>
+    <div class="pt-4 form-group text-left">
+        <h5>Username</h5>
         <input class="form-control" name="username" placeholder="username" type="text"/>
     </div>
-    <div class="form-group text-left">
-        <label>Password</label>
-        <input class="form-control" name="password" placeholder="password" type="text"/>
+    <div class="pt-4 form-group text-left">
+        <h5>Password</h5>
+        <input class="form-control" name="password" placeholder="password" type="password"/>
     </div>
-    <div class="form-group">
-        <button class="btn btn-md btn-secondary" name="button" type="submit">Confirm</button>
+    <div class="pt-4 form-group">
+        <button class="btn btn-lg btn-secondary" name="button" type="submit">Confirm</button>
     </div>
     <div class="form-group">
         <a href="register">Create an Account</a>
     </div>
 </div>
+</div>
 </form>
-
 
 <%- include("partials/footer"); -%>
 

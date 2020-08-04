@@ -280,8 +280,8 @@ app.get("/transaction-history", function(req, res){
 
 app.post("/return-book?:transactionId?:bookId", function(req, res){
     Transaction.updateOne({_id: req.query.transactionId}, {
-        isReturned = true,
-        returnDate = new Date()
+        isReturned: true,
+        returnDate: new Date()
     });
     Book.updateOne({_id: req.query.bookId}, {
         $cond: { 
