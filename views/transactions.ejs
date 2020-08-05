@@ -1,6 +1,15 @@
 <%- include("partials/header"); -%>
 <%- include("partials/navigation-librarian"); -%>
 
+<div class="bg-green p-4">
+    <form action="/transactions" method="post">
+        <div class="row input-group w-75 pl-5 pr-5 mx-auto">
+            <input class="col-10 form-control" name="keyword" type="text"/>
+            <button class="col-2 btn btn-outline-light" name="submit" type="submit">Search</button>
+        </div>
+    </form>
+</div>
+
 <div class="bg-light pb-5">
     <h2 class="text-center p-5">Transactions</h2>
     <div class="mx-auto w-75">

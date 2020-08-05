@@ -381,6 +381,14 @@ app.get("/transactions", function(req, res){
     })
 })
 
+app.post("/transactions", function(req, res){
+    User.find({username: req.body.keyword}, function(err, user){
+        Transaction.find({user: user}, function(err, result){
+            res.render("transactions", {results: result});
+        });
+    });
+});
+
 app.get("/transaction-history", function(req, res){
     Transaction.find({user: currentUser}, function(err, transactions){
         res.render("transaction-history", {results: transactions});
@@ -425,6 +433,8 @@ app.post("/users", function(req, res){
         res.render("users", {results: user});
     });
 });
+
+
 
 app.listen(3000, function() {
     console.log("Server has started successfully");
