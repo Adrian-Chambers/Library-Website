@@ -96,7 +96,7 @@ app.get("/", function(req, res){
 
 /* Sign In */
 app.get("/sign-in", function(req, res){
-    res.render("sign-in");
+    res.render("sign-in", {error: ""});
 });
 
 app.post("/sign-in", function(req, res){
@@ -108,7 +108,7 @@ app.post("/sign-in", function(req, res){
             currentUser = user;
             res.redirect("/");
         } else{
-            res.render("sign-in");
+            res.render("sign-in", {error: "Invalid username/password"});
         }
     })
 })
@@ -120,7 +120,7 @@ app.get("/sign-out", function(req, res){
 
 /* Register */
 app.get("/register", function(req, res){
-    res.render("register");
+    res.render("register", {error: ""});
 })
 
 app.post("/register", function(req, res){
@@ -131,7 +131,7 @@ app.post("/register", function(req, res){
 
     User.findOne({username: reqUsername}, function(err, user){
         if(user){
-            res.render("register");
+            res.render("register", {error: "Username already taken"});
         }
         else{
             const newUser = new User({
@@ -191,8 +191,7 @@ app.post("/borrow?:bookId", function(req, res){
             var transaction = new Transaction({
                 book: book,
                 user: currentUser,
-                borrowDate: date.getDate(),
-                returnDate: "Not Returned",
+                borrowDate: date.getMonth() + "-" + date.getDate() + "-" + date.getFullYear(),
                 isReturned: false
             });
             book.save(),
@@ -274,41 +273,62 @@ app.post("/book-create", function(req, res){
 
 /* Account */
 app.get("/account", function(req, res){
-    User.findOne({_id: currentUser._id}, function(err, user){
-        res.render("account", {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            username: user.username,
-            password: user.password,
-        });
+    res.render("account", {
+        user: currentUser,
+        error: ""
     });
 });
 
 app.post("/account", function(req, res){
-    User.updateOne({_id: currentUser._id}, {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        username: req.body.username,
-        password: req.body.password
-    }, function(err, res){
-
-    });
-    res.render("confirm", {
-        title: "Account Updated",
-        message: "Your account information has been updated.",
-        link: "/account"
+    User.findOne({username: req.body.username}, function(err, user){
+        if(user){
+            res.render("account", {user: currentUser, error: "Username already taken"});
+        }
+        else{
+            User.updateOne({_id: currentUser._id}, {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                username: req.body.username,
+                password: req.body.password
+            }, function(err, res){
+    
+            });
+            res.render("confirm", {
+                title: "Account Updated",
+                message: "Your account information has been updated.",
+                link: "/account"
+            });
+        }
     });
 })
-
 
 app.get("/account-edit?:userId", function(req, res){
     User.findOne({_id: req.query.userId}, function(err, user){
         res.render("account-edit", {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            username: user.username,
-            password: user.password,
-            userId: user._id
+            user: user,
+            error: ""
+        });
+    });
+});
+
+app.post("/account-edit?:userId", function(req, res){
+    User.findOne({_id: req.query.userId}, function(err, user){
+        User.findOne({username: req.body.username}, function(err, user2){
+            if(user2){
+                res.render("account-edit", {user: user, error: "Username already taken"})
+            }
+            else{
+                user.firstName = req.body.firstName;
+                user.lastName = req.body.lastName;
+                user.username = req.body.username;
+                user.password = req.body.password;
+                user.save();
+                res.render("confirm", {
+                    title: "Account Updated",
+                    message: "Your account information has been updated.",
+                    link: "/users",
+                });
+            }
         });
     });
 });
@@ -328,22 +348,28 @@ app.post("/account-delete?:userId", function(req, res){
 })
 
 app.get("/account-create", function(req, res){
-    res.render("account-create");
+    res.render("account-create", {error: ""});
 });
 
 app.post("/account-create", function(req, res){
-    const user = new User({
-        username: req.body.username,
-        password: req.body.password,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        isLibrarian: false
-    });
-    user.save();
-    res.render("confirm-librarian", {
-        title: "Account created",
-        message: "The account has been created",
-        link: "/"
+    User.findOne({username: req.body.username}, function(err, user){
+        if(user){
+            res.render("account-create", {error: "Username already taken"});
+        } else{
+            const user = new User({
+                username: req.body.username,
+                password: req.body.password,
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                isLibrarian: false
+            });
+            user.save();
+            res.render("confirm-librarian", {
+                title: "Account created",
+                message: "The account has been created",
+                link: "/"
+            })
+        }
     })
 })
 
@@ -364,7 +390,7 @@ app.get("/transaction-history", function(req, res){
 app.post("/return-book?:transactionId", function(req, res){
     Transaction.findOne({_id: req.query.transactionId}, function(err, transaction){
         transaction.isReturned = true;
-        transaction.returnDate = date.getDate();
+        transaction.returnDate = date.getMonth() + "-" + date.getDate() + "-" + date.getFullYear();
 
         var book = new Book(transaction.book);
         console.log(book);

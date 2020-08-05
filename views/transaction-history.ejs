@@ -20,7 +20,7 @@
                         <h4>by <%=transaction.book.author%></h4>
                         <h4>ISBN: <%=transaction.book.isbn%></h4>
                     </div>
-                    <h4 class="col-3"><%=transaction.dateBorrowed%></h4>
+                    <h4 class="col-3">Borrowed: <%=transaction.borrowDate%></h4>
                 <% if(transaction.isReturned === false) {  %>
                     <div class="col-3">
                         <form action="/return-book?transactionId=<%=transaction._id%>" method="post">
@@ -28,7 +28,7 @@
                         </form>
                     </div>
                 <% } else { %>
-                    <h4 class="col-3"><%=transaction.dateReturned%></h4>
+                    <h4 class="col-3">Returned: <%=transaction.returnDate%></h4>
                 <% } %>
                 </div>
                 <hr/>
