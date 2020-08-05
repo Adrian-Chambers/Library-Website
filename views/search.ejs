@@ -3,28 +3,23 @@
 
 <%- include("partials/search-books"); -%>
 
-<div class="bg-dark-brown p-5">
+<div class="bg-light">
     <% if(results.length === 0) { %>
         <div class="text-center bg-dark-brown p-5">
             <h3>No results found.</h3>
             <h4>Please try again.</h4>
         </div>
     <% } else {%>
-        <div class="mx-auto w-75">
-            <div class="row bg-light-brown">
-                <h3 class="table-item col-4">Title</h3>
-                <h3 class="table-item col-3">Author</h3>
-                <h3 class="table-item col-3">ISBN</h3>
-                <h3 class="table-item col-2"></h3>
-            </div>
+        <div class="mx-auto w-75 p-5">
+            <h2>Results for: <%=keyword%></h2>
             <% for(var i = 0; i < results.length; i++){ %>
             <%  var book = results[i];    %>
-                <div class="row bg-light text-dark">
-                    <h4 class="table-item col-4"><%=book.title%></h4>
-                    <h4 class="table-item col-3"><%=book.author%></h4>
-                    <h4 class="table-item col-3"><%=book.isbn%></h4>
-                    <a class="table-item col-2" href="/book-info?bookId=<%=book._id%>"><h4>View</h4></a>
+                <div class="table-row">
+                    <a  href="/book-info?bookId=<%=book._id%>"><h4><%=book.title%></h4></a>
+                    <h4>by <%=book.author%></h4>
+                    <h4>ISBN: <%=book.isbn%></h4>
                 </div> 
+                <hr />
             <% } %>
         </div>
     <% } %>

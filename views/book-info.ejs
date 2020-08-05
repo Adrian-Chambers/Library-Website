@@ -16,7 +16,7 @@
     </div>
     <div class="row">
         <h3 class="table-item mt-0 bg-dark-brown text-light col-4">Available?</h3>
-        <h4 class="table-item mt-0 bg-light-brown col-8"><%=book.availability.isReturned%></h4>
+        <h4 class="table-item mt-0 bg-light-brown col-8"><%=book.isReturned%></h4>
     </div><br />
     <form class="text-center mt-5" action="/borrow?bookId=<%=book._id%>" method="post">
         <button class="btn btn-lg btn-outline-light" name="borrow" type="submit">Borrow Book</button>

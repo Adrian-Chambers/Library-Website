@@ -1,8 +1,9 @@
 <%- include("partials/header"); -%>
 
-<div class="sign-in-container">
+<div class="jumbotron jumbotron2">
+<div class="dark-container p-5">
 
-<h2 class="text-center display-4">Register</h2>
+<h2 class="text-center text-light display-4">Register</h2>
 
 <form action="/register" method="post">
 <div class="text-center ml-auto mr-auto w-75">
@@ -25,7 +26,7 @@
         <input class="form-control" name="password" placeholder="password" type="text" />
     </div>
     <div class="pt-4 form-group">
-        <button class="btn btn-lg btn-secondary" type="submit">Submit</button>
+        <button class="btn btn-lg btn-outline-light" type="submit">Submit</button>
     </div>
     <div class="form-group">
         <a href="sign-in">Already have an account? Sign in.</a>
@@ -33,6 +34,7 @@
 </div>
 </form>
 
+</div>
 </div>
 
 <%- include("partials/footer"); -%>

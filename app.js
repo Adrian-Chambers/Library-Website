@@ -40,10 +40,8 @@ const bookSchema = new mongoose.Schema({
     title: String,
     author: String,
     isbn: String,
-    availability:{
-        isReturned: Boolean,
-        queue: [String]
-    }
+    isReturned: Boolean,
+    queue: []
 });
 const Book = mongoose.model("Book", bookSchema);
 Book.count(function(err, count){
@@ -65,12 +63,7 @@ Book.count(function(err, count){
         }
         
         for(var i = 0; i < titles.length; i++){
-            const book = new Book({ title: titles[i], isbn: isbns[i], author: firstNames[Math.floor(Math.random() * firstNames.length)] + " " + lastNames[Math.floor(Math.random() * lastNames.length)],
-                availability: {
-                    isReturned: true,
-                    queue: []
-                }
-            })
+            const book = new Book({ title: titles[i], isbn: isbns[i], author: firstNames[Math.floor(Math.random() * firstNames.length)] + " " + lastNames[Math.floor(Math.random() * lastNames.length)], isReturned: true, queue: []})
             book.save();
         }
     }
@@ -180,8 +173,8 @@ app.get("/book-info?:bookId", function (req, res){
 
 app.post("/borrow?:bookId", function(req, res){
     Book.findOne({_id: req.query.bookId}, function(err, book){
-        if(book.availability.isReturned === true){
-            book.availability.isReturned = false;
+        if(book.isReturned === true){
+            book.isReturned = false;
             var transaction = new Transaction({
                 book: book,
                 user: currentUser,
@@ -196,7 +189,7 @@ app.post("/borrow?:bookId", function(req, res){
                 link: "/"
             });
         } else {
-            book.availability.queue.push(currentUser._id);
+            book.queue.push(currentUser._id);
             res.render("confirm", {
                 title: "Added to queue.",
                 message: "This book is currently being borrowed by another patron. You have been added to the queue.",
@@ -281,13 +274,15 @@ app.post("/return-book?:transactionId?:bookId", function(req, res){
         isReturned: true,
         returnDate: new Date()
     });
-    Book.updateOne({_id: req.query.bookId}, {
-        $cond: { 
-            if: { $eq: [ { $size: availability.queue }, 0 ]}, 
-            then: isReturned = true,
-        },
-        $pop: { availability: queue -1}
+    Book.find({_id: req.query.bookId}, function(err, book){
+        var queue = book.queue;
+        if(queue.length === 0){
+               book.isReturned = true;
+        } else{
+            book.queue.shift();
+        }
     });
+    
     res.render("confirm",{
         title: "Book Returned",
         message: "The book has been returned.",
