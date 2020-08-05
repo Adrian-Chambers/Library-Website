@@ -1,0 +1,30 @@
+<%- include("partials/header"); -%>
+<%- include("partials/navigation-librarian"); -%>
+
+<div class="jumbotron jumbotron2 mb-0">
+
+    <h2 class="heading text-light text-center display-4 ">Edit Book</h2>
+
+<div class="jumbotron2-inner mx-auto w-50">
+    <form action="/book-create" method="post">
+    <div class="row">
+        <h3 class="table-item mb-0 bg-dark-brown text-light col-4">Title</h3>
+        <input class="table-item mb-0 bg-light-brown col-8" name="title" placeholder="title" type="text"/>
+    </div>
+    <div class="row">
+        <h3 class="table-item mt-0 mb-0 bg-dark-brown text-light col-4">Author</h3>
+        <input class="table-item mt-0 mb-0 bg-light-brown col-8" name="author" placeholder="author" type="text"/>
+    </div>
+    <div class="row">
+        <h3 class="table-item mt-0 mb-0 bg-dark-brown text-light col-4">ISBN</h3>
+        <input class="table-item mt-0 mb-0 bg-light-brown col-8" name="isbn" placeholder="isbn" type="text"/>
+    </div>
+    <br />
+    
+    <button class="btn btn-lg btn-outline-light" name="submit" type="submit">Confirm</button>
+    </form>
+
+</div>
+</div>
+
+<%- include("partials/footer"); -%>

@@ -1,11 +1,9 @@
 <%- include("partials/header"); -%>
 <%- include("partials/navigation-librarian"); -%>
 
-<div class="bg-light">
-    <div>
-        <%- include("partials/search") -%>
-    </div>
-    <div>
+<div class="bg-light pb-5">
+    <h2 class="text-center p-5">Transactions</h2>
+    <div class="mx-auto w-75">
         <% if(results.length === 0) { %>
             <div class="text-center p-5">
                 <h3>No transactions found.</h3>
@@ -14,12 +12,15 @@
         <% for(var i = 0; i < results.length; i++){ %>
         <%      var transaction = results[i];    %>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-3">
                         <h4><%=transaction.book.title%></h4>
                         <h4>by <%=transaction.book.author%></h4>
                         <h4>ISBN: <%=transaction.book.isbn%></h4>
                     </div>
-                    <h4 class="col-3"><%=transaction.dateBorrowed%></h4>
+                    <div class="col=3">
+                        <h4>Borrowed by <%=transaction.user.username%></h4>
+                    </div>
+                    <h4 class="col-3"><%=transaction.borrowDate%></h4>
                 <% if(transaction.isReturned === false) {  %>
                     <div class="col-3">
                         <form action="/return-book?transactionId=<%=transaction._id%>" method="post">
@@ -27,7 +28,7 @@
                         </form>
                     </div>
                 <% } else { %>
-                    <h4 class="col-3"><%=transaction.dateReturned%></h4>
+                    <h4 class="col-3"><%=transaction.returnDate%></h4>
                 <% } %>
                 </div>
                 <hr/>

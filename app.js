@@ -7,6 +7,7 @@ const _ = require("lodash");
 const app = express();
 const mongoose = require("mongoose");
 const fs = require("fs");
+const date = new Date();
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
@@ -190,8 +191,8 @@ app.post("/borrow?:bookId", function(req, res){
             var transaction = new Transaction({
                 book: book,
                 user: currentUser,
-                dateBorrowed: (new Date()).getDate(),
-                dateReturned: "Not Returned",
+                borrowDate: date.getDate(),
+                returnDate: "Not Returned",
                 isReturned: false
             });
             book.save(),
@@ -250,20 +251,30 @@ app.post("/book-delete?:bookId", function(req, res){
     });
 });
 
-/* Account Info */
-app.get("/account", function(req, res){
-    User.findOne({_id: currentUser._id}, function(err, user){
-        res.render("account", {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            username: user.username,
-            password: user.password,
-        });
-    });
+/* Create book */
+app.get("/book-create", function(req, res){
+    res.render("book-create");
 });
 
-app.get("/account?:userId", function(req, res){
-    User.findOne({_id: req.query.userId}, function(err, user){
+app.post("/book-create", function(req, res){
+    var book = new Book({
+        title: req.body.title,
+        author: req.body.author,
+        isbn: req.body.isbn,
+        isReturned: true,
+        queue: []
+    });
+    book.save();
+    res.render("confirm-librarian", {
+        title: "Book Created",
+        message: "Your book has been created",
+        link: "/"
+    })
+});
+
+/* Account */
+app.get("/account", function(req, res){
+    User.findOne({_id: currentUser._id}, function(err, user){
         res.render("account", {
             firstName: user.firstName,
             lastName: user.lastName,
@@ -289,20 +300,51 @@ app.post("/account", function(req, res){
     });
 })
 
-app.post("/account?:userId", function(req, res){
-    User.updateOne({_id: req.query.userId}, {
+
+app.get("/account-edit?:userId", function(req, res){
+    User.findOne({_id: req.query.userId}, function(err, user){
+        res.render("account-edit", {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            password: user.password,
+            userId: user._id
+        });
+    });
+});
+
+app.post("/account-delete?:userId", function(req, res){
+    User.deleteOne({_id: req.query.userId}, function(err, user){
+        if(err){
+            console.log(err);
+        } else{
+            res.render("confirm-librarian", {
+                title: "User Deleted",
+                message: "Your account has been successfully deleted.",
+                link: "/"
+            })
+        }
+    });
+})
+
+app.get("/account-create", function(req, res){
+    res.render("account-create");
+});
+
+app.post("/account-create", function(req, res){
+    const user = new User({
+        username: req.body.username,
+        password: req.body.password,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        username: req.body.username,
-        password: req.body.password
-    }, function(err, res){
-
+        isLibrarian: false
     });
+    user.save();
     res.render("confirm-librarian", {
-        title: "Account Updated",
-        message: "The account information has been updated.",
-        link: "/users"
-    });
+        title: "Account created",
+        message: "The account has been created",
+        link: "/"
+    })
 })
 
 /* Transactions */
@@ -322,7 +364,7 @@ app.get("/transaction-history", function(req, res){
 app.post("/return-book?:transactionId", function(req, res){
     Transaction.findOne({_id: req.query.transactionId}, function(err, transaction){
         transaction.isReturned = true;
-        transaction.returnDate = (new Date()).getDate();
+        transaction.returnDate = date.getDate();
 
         var book = new Book(transaction.book);
         console.log(book);
@@ -346,18 +388,17 @@ app.post("/return-book?:transactionId", function(req, res){
 
 /* Users */
 app.get("/users", function(req, res){
-    User.find(function(err, users){
-        res.render("users", {results: users});
-    })
-});
-
-app.get('/users?:keyword', function(req, res){
-    const keyword = req.query.keyword; 
-    User.find({username: keyword}, function(err, books){
-        res.render("users", {results: books});
+    User.find(function(err, user){
+        res.render("users", {results: user});
     });
 });
 
+app.post("/users", function(req, res){
+    const keyword = req.body.keyword;
+    User.find({username: keyword}, function(err, user){
+        res.render("users", {results: user});
+    });
+});
 
 app.listen(3000, function() {
     console.log("Server has started successfully");

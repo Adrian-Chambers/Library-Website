@@ -1,10 +1,16 @@
 <%- include("partials/header"); -%>
 <%- include("partials/navigation-librarian"); -%>
 
+<div class="bg-green p-4">
+    <form action="/users" method="post">
+        <div class="row input-group w-75 pl-5 pr-5 mx-auto">
+            <input class="col-10 form-control" name="keyword" type="text"/>
+            <button class="col-2 btn btn-outline-light" name="submit" type="submit">Search</button>
+        </div>
+    </form>
+</div>
+
 <div class="bg-light">
-    <div>
-        <%- include("partials/search") -%>
-    </div>
     <div>
     <% if(results.length === 0) { %>
         <div class="mx-auto w-75 p-5">
@@ -15,7 +21,7 @@
         <div class="mx-auto w-75 p-5">
             <% for(var i = 0; i < results.length; i++){ %>
             <%  var user = results[i];    %>
-                <a href="/account?userId=<%=user._id%>"><div class="table-row">
+                <a href="/account-edit?userId=<%=user._id%>"><div class="table-row">
                     <h4>Name: <%=user.firstName%> <%=user.lastName%></h4>
                     <h4>Username: <%=user.username%></h4>
                     <h4>Password: <%=user.password%></h4>
