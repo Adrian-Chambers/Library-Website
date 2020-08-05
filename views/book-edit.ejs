@@ -1,18 +1,37 @@
 <%- include("partials/header"); -%>
 <%- include("partials/navigation"); -%>
 
-<form action="/book-edit?bookId=<%=book._id%>" method="post">
-    <label>Title</label>
-    <input name="title" value="<%=book.title%>" type="text"/>
-    <label>Author</label>
-    <input name="author" value="<%=book.author%>" type="text"/>
-    <label>ISBN</label>
-    <input name="isbn" value="<%=book.isbn%>" type="text"/>
-    <button name="update" type="submit">Update</button>
-</form>
-<form action="/book-delete?bookId=<%=book._id%>" method="post">
-    <button name="delete" type="submit">Delete</button>
-</form>
+<div class="jumbotron jumbotron2 mb-0">
 
+    <h2 class="heading text-light text-center display-4 ">Edit Book</h2>
+
+<div class="jumbotron2-inner mx-auto w-50">
+    <div class="row">
+        <h3 class="table-item mb-0 bg-dark-brown text-light col-4">Title</h3>
+        <input class="table-item mb-0 bg-light-brown col-8" name="title" value="<%=book.title%>" type="text"/>
+    </div>
+    <div class="row">
+        <h3 class="table-item mt-0 mb-0 bg-dark-brown text-light col-4">Author</h3>
+        <input class="table-item mt-0 mb-0 bg-light-brown col-8" name="author" value="<%=book.author%>" type="text"/>
+    </div>
+    <div class="row">
+        <h3 class="table-item mt-0 mb-0 bg-dark-brown text-light col-4">ISBN</h3>
+        <input class="table-item mt-0 mb-0 bg-light-brown col-8" name="isbn" value="<%=book.isbn%>" type="text"/>
+    </div>
+    <div class="row">
+        <h3 class="table-item mt-0 bg-dark-brown text-light col-4">Available?</h3>
+        <h4 class="table-item mt-0 bg-light-brown col-8"><%=book.isReturned%></h4>
+    </div><br />
+    <div class="row">
+        <form clas="col-11" action="/book-delete?bookId=<%=book._id%>" method="post">
+            <button class="btn btn-lg btn-outline-light" name="delete" type="submit">Delete</button>
+        </form>
+        <form class="col-1" action="/book-edit?bookId=<%=book._id%>" method="post">
+            <button class="btn btn-lg btn-outline-light" name="edit" type="submit">Confirm</button>
+        </form>
+    </div>
+</div>
+</div>
 
 <%- include("partials/footer"); -%>
+

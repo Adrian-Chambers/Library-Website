@@ -23,7 +23,7 @@
                     <h4 class="col-3"><%=transaction.dateBorrowed%></h4>
                 <% if(transaction.isReturned === false) {  %>
                     <div class="col-3">
-                        <form action="/return-book?transactionId=<%=transaction._id%>?bookId=<%=transaction.book._id%>" method="post">
+                        <form action="/return-book?transactionId=<%=transaction._id%>" method="post">
                             <button class="m-3 btn btn-outline-light" type="submit">Return</button>
                         </form>
                     </div>

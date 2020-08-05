@@ -87,6 +87,9 @@ app.get("/", function(req, res){
     if(currentUser == null){
         res.redirect("sign-in");
     }
+    else if(currentUser.isLibrarian){
+        res.render("home-librarian");
+    }
     res.render("home");
 })
 
@@ -162,6 +165,7 @@ app.post("/search", function(req, res){
 
 /* View Book */
 app.get("/book-info?:bookId", function (req, res){
+    if(currentUser.isLibrarian) res.redirect("/book-edit?bookId=" + req.query.bookId);
     Book.findOne({_id: req.query.bookId}, function(err, book){
         if(book){
             res.render("book-info", {book: book});
@@ -178,10 +182,11 @@ app.post("/borrow?:bookId", function(req, res){
             var transaction = new Transaction({
                 book: book,
                 user: currentUser,
-                dateBorrowed: Date.now(),
+                dateBorrowed: (new Date()).getDate(),
                 dateReturned: "Not Returned",
                 isReturned: false
             });
+            book.save(),
             transaction.save();
             res.render("confirm", {
                 title: "Borrowing Book",
@@ -190,6 +195,7 @@ app.post("/borrow?:bookId", function(req, res){
             });
         } else {
             book.queue.push(currentUser._id);
+            book.save(),
             res.render("confirm", {
                 title: "Added to queue.",
                 message: "This book is currently being borrowed by another patron. You have been added to the queue.",
@@ -201,8 +207,8 @@ app.post("/borrow?:bookId", function(req, res){
 
 /* Edit Book */
 app.get("/book-edit?:bookId", function(req, res){
-    Book.findOne({_id: bookId}, function(err, book){
-        res.render("book-edit", book);
+    Book.findOne({_id: req.query.bookId}, function(err, book){
+        res.render("book-edit", {book: book});
     });
 });
 
@@ -269,18 +275,22 @@ app.get("/transaction-history", function(req, res){
     })
 })
 
-app.post("/return-book?:transactionId?:bookId", function(req, res){
-    Transaction.updateOne({_id: req.query.transactionId}, {
-        isReturned: true,
-        returnDate: new Date()
-    });
-    Book.find({_id: req.query.bookId}, function(err, book){
-        var queue = book.queue;
-        if(queue.length === 0){
-               book.isReturned = true;
-        } else{
-            book.queue.shift();
+app.post("/return-book?:transactionId", function(req, res){
+    Transaction.findOne({_id: req.query.transactionId}, function(err, transaction){
+        transaction.isReturned = true;
+        transaction.returnDate = (new Date()).getDate();
+
+        var book = new Book(transaction.book);
+        console.log(book);
+        if(book){
+            if(book.queue === null || book.queue.length === 0){
+                book.isReturned = true;
+            } else{
+                book.queue.shift();
+            }
         }
+        transaction.save();
+        book.save();
     });
     
     res.render("confirm",{
