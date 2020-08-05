@@ -22,6 +22,10 @@ nav a:hover{
   color: #D6AC97;
 }
 
+footer{
+  max-height: 100px;
+}
+
 /* containers */
 .jumbotron1{
   background-image: url("/images/library1.jpg");

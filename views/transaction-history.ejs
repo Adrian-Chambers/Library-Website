@@ -1,13 +1,14 @@
 <%- include("partials/header"); -%>
-<%- include("partials/navigation-librarian"); -%>
+<%- include("partials/navigation"); -%>
 
-<div class="bg-light">
-    <div>
-        <%- include("partials/search") -%>
-    </div>
-    <div>
+<div class="jumbotron jumbotron2">
+<div class="dark-container">
+<h2 class="text-center text-light display-4 pt-3">Transactions</h2>
+
+<div class="mx-auto w-75">
+   <div>
         <% if(results.length === 0) { %>
-            <div class="text-center p-5">
+            <div class="text-center">
                 <h3>No transactions found.</h3>
             </div>
         <% } else {%>
@@ -33,6 +34,8 @@
                 <hr/>
         <% }} %>
     </div>
+</div>
+</div>
 </div>
 
 <%- include("partials/footer"); -%>

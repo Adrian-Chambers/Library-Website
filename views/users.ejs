@@ -1,0 +1,30 @@
+<%- include("partials/header"); -%>
+<%- include("partials/navigation-librarian"); -%>
+
+<div class="bg-light">
+    <div>
+        <%- include("partials/search") -%>
+    </div>
+    <div>
+    <% if(results.length === 0) { %>
+        <div class="mx-auto w-75 p-5">
+            <h3>No results found.</h3>
+            <h4>Please try again.</h4>
+        </div>
+    <% } else {%>
+        <div class="mx-auto w-75 p-5">
+            <% for(var i = 0; i < results.length; i++){ %>
+            <%  var user = results[i];    %>
+                <a href="/account?userId=<%=user._id%>"><div class="table-row">
+                    <h4>Name: <%=user.firstName%> <%=user.lastName%></h4>
+                    <h4>Username: <%=user.username%></h4>
+                    <h4>Password: <%=user.password%></h4>
+                </div> </a>
+                <hr />
+            <% } %>
+        </div>
+    <% } %>
+    </div>
+</div>
+
+<%- include("partials/footer"); -%>

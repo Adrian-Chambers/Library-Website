@@ -1,0 +1,18 @@
+<%- include("partials/header"); -%>
+<%- include("partials/navigation-librarian"); -%>
+
+<div class="jumbotron jumbotron2">
+<div class="dark-container">
+<h2 class="text-light text-center display-4 p-5"><%=title%></h2>
+
+<div class="text-center ml-auto mr-auto w-75">
+    <h4><%=message%></h4>
+
+    <form action="<%=link%>" method="get"> 
+        <button class="btn btn-lg btn-outline-light m-5" type="confirm">Back</button>
+    </form>
+</div>
+</div>
+</div>
+
+<%- include("partials/footer"); -%>

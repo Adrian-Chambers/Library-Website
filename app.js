@@ -151,10 +151,18 @@ app.get("/search?:keyword", function(req, res){
     const keyword = req.query.keyword; 
     Book.find({$or: [{title: keyword}, {author: keyword}, {isbn: keyword}]}, function(err, books){
         if(books) {
-            res.render("search", { 
-                results: books, 
-                keyword: keyword 
-            });
+            if(currentUser.isLibrarian){
+                res.render("search-librarian",{
+                    results: books, 
+                    keyword: keyword 
+                })
+            } else {
+                res.render("search", { 
+                    results: books, 
+                    keyword: keyword 
+                });
+            }
+            
         }
     });
 });
@@ -221,7 +229,7 @@ app.post("/book-edit?:bookId", function(req, res){
 
     });
 
-    res.render("confirm", {
+    res.render("confirm-librarian", {
         title: "Book Edited",
         message: "Your book has been edited",
         link: "/"
@@ -233,7 +241,7 @@ app.post("/book-delete?:bookId", function(req, res){
         if(err){
             console.log(err);
         } else{
-            res.render("confirm", {
+            res.render("confirm-librarian", {
                 title: "Book Deleted",
                 message: "The book has been successfully deleted.",
                 link: "/"
@@ -254,8 +262,19 @@ app.get("/account", function(req, res){
     });
 });
 
+app.get("/account?:userId", function(req, res){
+    User.findOne({_id: req.query.userId}, function(err, user){
+        res.render("account", {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            password: user.password,
+        });
+    });
+});
+
 app.post("/account", function(req, res){
-    User.updateOne({_id: currentUser_id}, {
+    User.updateOne({_id: currentUser._id}, {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         username: req.body.username,
@@ -263,7 +282,27 @@ app.post("/account", function(req, res){
     }, function(err, res){
 
     });
-    res.redirect("/account");
+    res.render("confirm", {
+        title: "Account Updated",
+        message: "Your account information has been updated.",
+        link: "/account"
+    });
+})
+
+app.post("/account?:userId", function(req, res){
+    User.updateOne({_id: req.query.userId}, {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        username: req.body.username,
+        password: req.body.password
+    }, function(err, res){
+
+    });
+    res.render("confirm-librarian", {
+        title: "Account Updated",
+        message: "The account information has been updated.",
+        link: "/users"
+    });
 })
 
 /* Transactions */
@@ -276,7 +315,7 @@ app.get("/transactions", function(req, res){
 
 app.get("/transaction-history", function(req, res){
     Transaction.find({user: currentUser}, function(err, transactions){
-        res.render("transactions", {results: transactions});
+        res.render("transaction-history", {results: transactions});
     })
 })
 
@@ -305,6 +344,21 @@ app.post("/return-book?:transactionId", function(req, res){
     })
 });
 
+/* Users */
+app.get("/users", function(req, res){
+    User.find(function(err, users){
+        res.render("users", {results: users});
+    })
+});
+
+app.get('/users?:keyword', function(req, res){
+    const keyword = req.query.keyword; 
+    User.find({username: keyword}, function(err, books){
+        res.render("users", {results: books});
+    });
+});
+
+
 app.listen(3000, function() {
-  console.log("Server has started successfully");
+    console.log("Server has started successfully");
 });
