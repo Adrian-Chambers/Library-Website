@@ -6,6 +6,7 @@
     <h2 class="heading text-light text-center display-4 ">Edit Book</h2>
 
 <div class="jumbotron2-inner mx-auto w-50">
+    <form action="/book-edit?bookId=<%=book._id%>" method="post">
     <div class="row">
         <h3 class="table-item mb-0 bg-dark-brown text-light col-4">Title</h3>
         <input class="table-item mb-0 bg-light-brown col-8" name="title" value="<%=book.title%>" type="text"/>
@@ -22,14 +23,13 @@
         <h3 class="table-item mt-0 bg-dark-brown text-light col-4">Available?</h3>
         <h4 class="table-item mt-0 bg-light-brown col-8"><%=book.isReturned%></h4>
     </div><br />
-    <div class="row">
-        <form clas="col-11" action="/book-delete?bookId=<%=book._id%>" method="post">
-            <button class="btn btn-lg btn-outline-light" name="delete" type="submit">Delete</button>
-        </form>
-        <form class="col-1" action="/book-edit?bookId=<%=book._id%>" method="post">
-            <button class="btn btn-lg btn-outline-light" name="edit" type="submit">Confirm</button>
-        </form>
-    </div>
+    
+    <button class="btn btn-lg btn-outline-light" name="edit" type="submit">Confirm</button>
+    </form>
+
+    <form action="/book-delete?bookId=<%=book._id%>" method="post">
+        <button class="btn btn-lg btn-outline-light" name="delete" type="submit">Delete</button>
+    </form>
 </div>
 </div>
 

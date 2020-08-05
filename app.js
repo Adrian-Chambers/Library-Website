@@ -220,7 +220,12 @@ app.post("/book-edit?:bookId", function(req, res){
     }, function(err, res){
 
     });
-    
+
+    res.render("confirm", {
+        title: "Book Edited",
+        message: "Your book has been edited",
+        link: "/"
+    });
 });
 
 app.post("/book-delete?:bookId", function(req, res){
