@@ -3,9 +3,16 @@
 
 <%- include("partials/search-books"); -%>
 
-<% if(role === "librarian" || role === "admin") { %>
-    <div class="bg-light">
-    <div class="p-5 row w-75 mx-auto">
+<div class="white-container-small">
+    <% if(role === "patron") { %>
+    <div class="p-5 w-75 mx-auto">
+        <h1>Welcome!</h1>
+        <p>Use the search bar above to search for books.</p>
+        <p>Or use the navigation to view your account information and transaction history.</p>
+    </div>
+    <% } %>
+    <% if(role === "librarian" || role === "admin") { %>
+    <div class="p-5 row w-75 mx-auto">    
         <div class="col-4">
             <h4>Books</h4>
             <h5><a href="/book-create">Add Book</a></h5>
@@ -22,9 +29,9 @@
             <h4>Transactions</h4>
             <h5><a href="/transactions">View Transactions</a></h5>
         </div>
-    </div>
-    </div>
- <% } %>
+    </div> <% } %>
+</div>
+
 
 <%- include("partials/footer"); -%>
 

@@ -263,17 +263,24 @@ app.get("/account-info?:userId", function(req, res){
 app.post("/account-update?:userId", function(req, res){
     User.findOne({_id: req.query.userId}, function(err, user){
         User.findOne({username: req.body.username}, function(err, user2){
-            if(user2 && !(user2._id).equals(user._id)){
-                res.render("account-info", {user: user, error: "Username already taken", role: currentUser.role })
+            var reqRole = req.body.role;
+            if(user2 && !(user2).equals(user)){
+                res.render("account-info", {user: user, error: "Username already taken", role: currentUser.role });
             }
             else{
+                if(reqRole){
+                    user.role = reqRole;
+                } else{
+                    user.role = user.role;
+                }
                 user.firstName = req.body.firstName;
                 user.lastName = req.body.lastName;
                 user.username = req.body.username;
                 user.password = req.body.password;
-                user.role = user.role;
+                    
                 user.save();
-                if(currentUser.role === "patron"){
+                if(currentUser.equals(user)){
+                    currentUser = user;
                     confirm(res, "Account Updated", "Your account information has been updated.", "/account-info");
                 } else{
                     confirm(res, "Account Updated", "The account information has been updated.", "/users");
@@ -288,7 +295,7 @@ app.post("/account-delete?:userId", function(req, res){
         if(err){
             console.log(err);
         } else{
-            confirm(res, "User Deleted", "Your account has been successfully deleted.", "/");
+            confirm(res, "User Deleted", "The account has been successfully deleted.", "/users");
         }
     });
 });
