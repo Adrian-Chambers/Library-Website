@@ -1,7 +1,30 @@
 <%- include("partials/header"); -%>
-<%- include("partials/navigation"); -%>
+<%- include("partials/navigation-" + role); -%>
 
 <%- include("partials/search-books"); -%>
+
+<% if(role === "librarian" || role === "admin") { %>
+    <div class="bg-light">
+    <div class="p-5 row w-75 mx-auto">
+        <div class="col-4">
+            <h4>Books</h4>
+            <h5><a href="/book-create">Add Book</a></h5>
+            <h5><a href="/search">View Books</a></h5>
+        </div>
+        <div class="col-4">
+            <h4>Users</h4>
+            <% if(role === "admin") { %> 
+            <h5><a href="/account-create">Add User</a></h5>
+            <% } %>
+            <h5><a href="/users">View Users</a></h5>
+        </div>
+        <div class="col-4">
+            <h4>Transactions</h4>
+            <h5><a href="/transactions">View Transactions</a></h5>
+        </div>
+    </div>
+    </div>
+ <% } %>
 
 <%- include("partials/footer"); -%>
 

@@ -54,6 +54,11 @@ footer{
   background-color: #D6AC97;
 }
 
+.white-container{
+  background-color: whitesmoke;
+  min-height: 770px;
+}
+
 .dark-container{
   background-color: #4D4755;
   border-radius: 10px;

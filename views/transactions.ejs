@@ -10,32 +10,30 @@
     </form>
 </div>
 
-<div class="bg-light pb-5">
-    <h2 class="text-center p-5">Transactions</h2>
-    <div class="mx-auto w-75">
+<div class="white-container">
+    <div >
         <% if(results.length === 0) { %>
-            <div class="text-center p-5">
+            <div class="mx-auto w-75 p-5">
                 <h3>No transactions found.</h3>
             </div>
         <% } else {%>
         <% for(var i = 0; i < results.length; i++){ %>
         <%      var transaction = results[i];    %>
-                <div class="row">
-                    <div class="col-4">
+                <div class="row mx-auto w-75 p-5">
+                    <div class="col-7">
                         <h4><%=transaction.book.title%></h4>
                         <h4>by <%=transaction.book.author%></h4>
                         <h4>ISBN: <%=transaction.book.isbn%></h4>
                     </div>
-                    <div class="col-4">
-                        <h4>Borrowed by <%=transaction.user.username%> on <%=transaction.borrowDate%></h4>
-                    </div>
-                <% if(transaction.isReturned === false) {  %>
-                    <div class="col-4">
-                        <h4 class="col-4 error">Not Returned</h4>
-                    </div>
+                    <div class="col-5" >
+                        <h4>Borrowed by: <%=transaction.user.username%></h4>
+                        <h4>Borrowed on: <%=transaction.borrowDate%></h4>
+                    <% if(transaction.isReturned === false) {  %>
+                        <h4 class="error">Not Returned</h4>
                 <% } else { %>
-                    <h4 class="col-4">Returned on <%=transaction.returnDate%></h4>
+                        <h4>Returned on: <%=transaction.returnDate%></h4>
                 <% } %>
+                    </div>
                 </div>
                 <hr/>
         <% }} %>

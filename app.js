@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     password: String,
     firstName: String,
     lastName: String,
-    isLibrarian: Boolean,
+    role: String,
 });
 const User = mongoose.model("User", userSchema);
 User.count(function(err, count){
@@ -31,9 +31,17 @@ User.count(function(err, count){
             password: "pass",
             firstName: "librarian",
             lastName: "librarian",
-            isLibrarian: true,
+            role: "librarian",
         });
         librarian.save();
+        const admin = new User({
+            username: "admin",
+            password: "adminpass",
+            firstName: "admin",
+            lastName: "admin",
+            role: "admin",
+        });
+        admin.save();
     }
 })
 
@@ -73,6 +81,7 @@ Book.count(function(err, count){
 const transactionSchema = new mongoose.Schema({
     book: bookSchema,
     user: userSchema,
+    username: String,
     borrowDate: String,
     returnDate: String,
     isReturned: Boolean
@@ -88,11 +97,8 @@ app.get("/", function(req, res){
     if(currentUser == null){
         res.redirect("sign-in");
     }
-    else if(currentUser.isLibrarian){
-        res.render("home-librarian");
-    }
-    res.render("home");
-})
+    res.render("home", {role: currentUser.role});
+});
 
 /* Sign In */
 app.get("/sign-in", function(req, res){
@@ -110,8 +116,8 @@ app.post("/sign-in", function(req, res){
         } else{
             res.render("sign-in", {error: "Invalid username/password"});
         }
-    })
-})
+    });
+});
 
 app.get("/sign-out", function(req, res){
     currentUser = null;
@@ -121,25 +127,20 @@ app.get("/sign-out", function(req, res){
 /* Register */
 app.get("/register", function(req, res){
     res.render("register", {error: ""});
-})
+});
 
 app.post("/register", function(req, res){
-    const reqUsername = req.body.username;
-    const reqPass = req.body.password;
-    const reqFirst = req.body.firstName;
-    const reqLast = req.body.lastName;
-
-    User.findOne({username: reqUsername}, function(err, user){
+    User.findOne({username: req.body.username}, function(err, user){
         if(user){
             res.render("register", {error: "Username already taken"});
         }
         else{
             const newUser = new User({
-                username: reqUsername,
-                password: reqPass,
-                firstName: reqFirst,
-                lastName: reqLast,
-                isLibrarian: false
+                username: req.body.username,
+                password: req.body.password,
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                role: "patron"
             });
             newUser.save();
             res.redirect("/sign-in");
@@ -152,18 +153,11 @@ app.get("/search?:keyword", function(req, res){
     const keyword = req.query.keyword; 
     Book.find({$or: [{title: keyword}, {author: keyword}, {isbn: keyword}]}, function(err, books){
         if(books) {
-            if(currentUser.isLibrarian){
-                res.render("search-librarian",{
-                    results: books, 
-                    keyword: keyword 
-                })
-            } else {
-                res.render("search", { 
-                    results: books, 
-                    keyword: keyword 
-                });
-            }
-            
+            res.render("search", { 
+                results: books, 
+                keyword: keyword,
+                role: currentUser.role
+            });
         }
     });
 });
@@ -174,10 +168,10 @@ app.post("/search", function(req, res){
 
 /* View Book */
 app.get("/book-info?:bookId", function (req, res){
-    if(currentUser.isLibrarian) res.redirect("/book-edit?bookId=" + req.query.bookId);
+    if(currentUser.role === "librarian") res.redirect("/book-edit?bookId=" + req.query.bookId);
     Book.findOne({_id: req.query.bookId}, function(err, book){
         if(book){
-            res.render("book-info", {book: book});
+            res.render("book-info", {book: book, role: currentUser.role });
         } else{
             res.redirect("/");
         }
@@ -191,24 +185,17 @@ app.post("/borrow?:bookId", function(req, res){
             var transaction = new Transaction({
                 book: book,
                 user: currentUser,
+                username: currentUser.username,
                 borrowDate: date.getMonth() + "-" + date.getDate() + "-" + date.getFullYear(),
                 isReturned: false
             });
             book.save(),
             transaction.save();
-            res.render("confirm", {
-                title: "Borrowing Book",
-                message: "You are now borrowing the book.",
-                link: "/"
-            });
+            confirm(res, "Borrowing Book", "You are now borrowing the book.", "/");
         } else {
             book.queue.push(currentUser._id);
             book.save(),
-            res.render("confirm", {
-                title: "Added to queue.",
-                message: "This book is currently being borrowed by another patron. You have been added to the queue.",
-                link: "/"
-            });
+            confirm(res,  "Added to queue.", "This book is currently being borrowed by another patron. You have been added to the queue.", "/");
         }
     });
 })
@@ -229,11 +216,7 @@ app.post("/book-edit?:bookId", function(req, res){
 
     });
 
-    res.render("confirm-librarian", {
-        title: "Book Edited",
-        message: "Your book has been edited",
-        link: "/"
-    });
+    confirm(res, "Book Edited", "Your book has been edited", "/");
 });
 
 app.post("/book-delete?:bookId", function(req, res){
@@ -241,11 +224,7 @@ app.post("/book-delete?:bookId", function(req, res){
         if(err){
             console.log(err);
         } else{
-            res.render("confirm-librarian", {
-                title: "Book Deleted",
-                message: "The book has been successfully deleted.",
-                link: "/"
-            })
+            confirm(res, "Book Deleted", "The book has been successfully deleted.", "/");
         }
     });
 });
@@ -264,88 +243,55 @@ app.post("/book-create", function(req, res){
         queue: []
     });
     book.save();
-    res.render("confirm-librarian", {
-        title: "Book Created",
-        message: "Your book has been created",
-        link: "/"
-    })
+    confirm(res, "Book Created", "Your book has been created", "/");
 });
 
 /* Account */
-app.get("/account", function(req, res){
-    res.render("account", {
-        user: currentUser,
-        error: ""
-    });
-});
-
-app.post("/account", function(req, res){
-    User.findOne({username: req.body.username}, function(err, user){
-        if(user){
-            res.render("account", {user: currentUser, error: "Username already taken"});
-        }
-        else{
-            User.updateOne({_id: currentUser._id}, {
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                username: req.body.username,
-                password: req.body.password
-            }, function(err, res){
-    
-            });
-            res.render("confirm", {
-                title: "Account Updated",
-                message: "Your account information has been updated.",
-                link: "/account"
-            });
-        }
-    });
-})
-
-app.get("/account-edit?:userId", function(req, res){
+app.get("/account-info?:userId", function(req, res){
+    if(!req.query.userId){
+        res.redirect("/account-info?userId=" + currentUser._id);
+    }
     User.findOne({_id: req.query.userId}, function(err, user){
-        res.render("account-edit", {
+        res.render("account-info", {
             user: user,
-            error: ""
+            error: "",
+            role: currentUser.role
         });
     });
 });
 
-app.post("/account-edit?:userId", function(req, res){
+app.post("/account-update?:userId", function(req, res){
     User.findOne({_id: req.query.userId}, function(err, user){
         User.findOne({username: req.body.username}, function(err, user2){
-            if(user2){
-                res.render("account-edit", {user: user, error: "Username already taken"})
+            if(user2 && !(user2._id).equals(user._id)){
+                res.render("account-info", {user: user, error: "Username already taken", role: currentUser.role })
             }
             else{
                 user.firstName = req.body.firstName;
                 user.lastName = req.body.lastName;
                 user.username = req.body.username;
                 user.password = req.body.password;
+                user.role = user.role;
                 user.save();
-                res.render("confirm", {
-                    title: "Account Updated",
-                    message: "Your account information has been updated.",
-                    link: "/users",
-                });
+                if(currentUser.role === "patron"){
+                    confirm(res, "Account Updated", "Your account information has been updated.", "/account-info");
+                } else{
+                    confirm(res, "Account Updated", "The account information has been updated.", "/users");
+                }
             }
         });
     });
 });
 
 app.post("/account-delete?:userId", function(req, res){
-    User.deleteOne({_id: req.query.userId}, function(err, user){
+    User.deleteOne({_id: req.query.userId}, function(err, u){
         if(err){
             console.log(err);
         } else{
-            res.render("confirm-librarian", {
-                title: "User Deleted",
-                message: "Your account has been successfully deleted.",
-                link: "/"
-            })
+            confirm(res, "User Deleted", "Your account has been successfully deleted.", "/");
         }
     });
-})
+});
 
 app.get("/account-create", function(req, res){
     res.render("account-create", {error: ""});
@@ -356,36 +302,36 @@ app.post("/account-create", function(req, res){
         if(user){
             res.render("account-create", {error: "Username already taken"});
         } else{
-            const user = new User({
-                username: req.body.username,
-                password: req.body.password,
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                isLibrarian: false
-            });
-            user.save();
-            res.render("confirm-librarian", {
-                title: "Account created",
-                message: "The account has been created",
-                link: "/"
-            })
+            var reqRole = req.body.role;
+            if(reqRole === "patron" || reqRole === "librarian" || reqRole === "admin"){
+                const user = new User({
+                    username: req.body.username,
+                    password: req.body.password,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    role: req.body.role
+                });
+                user.save();
+                confirm(res, "Account created", "The account has been created", "/");
+            } else{
+                res.render("account-create", {error: "Invalid Role. Must be a patron, librarian, or admin"});
+            }            
         }
     })
 })
 
 /* Transactions */
 app.get("/transactions", function(req, res){
-    if(currentUser.isLibrarian == false) res.redirect("/transaction-history");
+    if(currentUser.role == "patron") res.redirect("/transaction-history");
     Transaction.find(function(err, transactions){
         res.render("transactions", {results: transactions});
-    })
-})
+    });
+});
 
 app.post("/transactions", function(req, res){
-    User.find({username: req.body.keyword}, function(err, user){
-        Transaction.find({user: user}, function(err, result){
-            res.render("transactions", {results: result});
-        });
+    
+    Transaction.find({username: req.body.keyword}, function(err2, transactions){
+        res.render("transactions", {results: transactions});
     });
 });
 
@@ -393,7 +339,7 @@ app.get("/transaction-history", function(req, res){
     Transaction.find({user: currentUser}, function(err, transactions){
         res.render("transaction-history", {results: transactions});
     })
-})
+});
 
 app.post("/return-book?:transactionId", function(req, res){
     Transaction.findOne({_id: req.query.transactionId}, function(err, transaction){
@@ -413,27 +359,31 @@ app.post("/return-book?:transactionId", function(req, res){
         book.save();
     });
     
-    res.render("confirm",{
-        title: "Book Returned",
-        message: "The book has been returned.",
-        link: "/transactions"
-    })
+    confirm(res, "Book Returned", "The book has been returned.",  "/transactions");
 });
 
 /* Users */
 app.get("/users", function(req, res){
     User.find(function(err, user){
-        res.render("users", {results: user});
+        res.render("users", {results: user, role: currentUser.role});
     });
 });
 
 app.post("/users", function(req, res){
     const keyword = req.body.keyword;
     User.find({username: keyword}, function(err, user){
-        res.render("users", {results: user});
+        res.render("users", {results: user, role: currentUser.role});
     });
 });
 
+function confirm(res, title, message, link){
+    res.render("confirm",{
+        title: title,
+        message: message,
+        link: link,
+        role: currentUser.role
+    });
+};
 
 
 app.listen(3000, function() {

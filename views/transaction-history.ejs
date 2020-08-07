@@ -1,5 +1,5 @@
 <%- include("partials/header"); -%>
-<%- include("partials/navigation"); -%>
+<%- include("partials/navigation-patron"); -%>
 
 <div class="jumbotron jumbotron2">
 <div class="dark-container">
@@ -20,16 +20,16 @@
                         <h4>by <%=transaction.book.author%></h4>
                         <h4>ISBN: <%=transaction.book.isbn%></h4>
                     </div>
-                    <h4 class="col-3">Borrowed: <%=transaction.borrowDate%></h4>
+                    <div class="col-6">
+                    <h4>Borrowed: <%=transaction.borrowDate%></h4><br />
                 <% if(transaction.isReturned === false) {  %>
-                    <div class="col-3">
                         <form action="/return-book?transactionId=<%=transaction._id%>" method="post">
-                            <button class="m-3 btn btn-outline-light" type="submit">Return</button>
+                            <button class="btn btn-outline-light" type="submit">Return Now</button>
                         </form>
-                    </div>
                 <% } else { %>
-                    <h4 class="col-3">Returned: <%=transaction.returnDate%></h4>
+                    <h4>Returned: <%=transaction.returnDate%></h4>
                 <% } %>
+                    </div>
                 </div>
                 <hr/>
         <% }} %>

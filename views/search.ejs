@@ -1,11 +1,18 @@
-<%- include("partials/header") -%>
-<%- include("partials/navigation") -%>
+<%- include("partials/header"); -%>
+<%- include("partials/navigation-" + role); -%>
 
-<%- include("partials/search-books"); -%>
+<div class="bg-green p-4">
+    <form action="/search" method="post">
+        <div class="row input-group w-75 pl-5 pr-5 mx-auto">
+            <input class="col-10 form-control" name="keyword" type="text"/>
+            <button class="col-2 btn btn-outline-light" name="submit" type="submit">Search</button>
+        </div>
+    </form>
+    </div>
 
-<div class="bg-light">
+<div class="white-container">
     <% if(results.length === 0) { %>
-        <div class="text-center bg-dark-brown p-5">
+        <div class="text-center p-5">
             <h3>No results found.</h3>
             <h4>Please try again.</h4>
         </div>
@@ -25,4 +32,4 @@
     <% } %>
 </div>
 
-<%- include("partials/footer") -%>
+<%- include("partials/footer"); -%>

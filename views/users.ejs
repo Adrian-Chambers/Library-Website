@@ -1,5 +1,5 @@
 <%- include("partials/header"); -%>
-<%- include("partials/navigation-librarian"); -%>
+<%- include("partials/navigation-" + role); -%>
 
 <div class="bg-green p-4">
     <form action="/users" method="post">
@@ -10,27 +10,30 @@
     </form>
 </div>
 
-<div class="bg-light">
-    <div>
+<div class="white-container">
     <% if(results.length === 0) { %>
         <div class="mx-auto w-75 p-5">
             <h3>No results found.</h3>
             <h4>Please try again.</h4>
         </div>
     <% } else {%>
-        <div class="mx-auto w-75 p-5">
             <% for(var i = 0; i < results.length; i++){ %>
             <%  var user = results[i];    %>
-                <a href="/account-edit?userId=<%=user._id%>"><div class="table-row">
-                    <h4>Name: <%=user.firstName%> <%=user.lastName%></h4>
-                    <h4>Username: <%=user.username%></h4>
-                    <h4>Password: <%=user.password%></h4>
-                </div> </a>
-                <hr />
-            <% } %>
-        </div>
+                <div class="row mx-auto w-75 p-5">
+                    <div class="col-7">
+                        <h4>Name: <%=user.firstName%> <%=user.lastName%></h4>
+                        <h4 name="keyword">Username: <%=user.username%></h4>
+                        <h4>Password: <%=user.password%></h4>
+                    </div>
+                    <div class="col-4">
+                        <% if(role === "admin"){ %>
+                        <a class="btn btn-lg btn-outline-dark" href="/account-info?userId=<%=user._id%>">Edit User Info</a>
+                        <% } %>
+                    </div>
+                </div>
+                <hr /> 
+            <% } %>   
     <% } %>
-    </div>
 </div>
 
 <%- include("partials/footer"); -%>
